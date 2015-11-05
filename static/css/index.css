@@ -1,0 +1,35 @@
+.toolbar {
+    width : 100%;
+    text-align : right;
+    border-width : 1px;
+    border-bottom-style : solid;
+}
+
+.choose button, .reset {
+    width : 200px;
+    height : 100px;
+    font-size : 40px;
+}
+
+.keywordSelector {
+    border : 1px solid #000000;
+    margin : 2px;
+    padding : 2px;
+    display : inline-block;
+    cursor : pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.selected {
+    background-color : #AAAAAA;
+}
+
+/*.canvas {
+    height : 600px;
+}*/
+
+.data {
+    display : none;
+}

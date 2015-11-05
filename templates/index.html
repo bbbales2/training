@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <script src="static/js/jquery.js"></script>
+    <script src="static/js/underscore.js"></script>
+    <script src="static/js/backbone.js"></script>
+
+    <script src="static/js/index.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="static/css/index.css">
+  </head>
+  <body>
+    <div class="data">{{ data }}</div>
+    <div class="toolbar">Classifications: {{ classifications }}, Segmentations: {{ segmentations }}, Username: {{ username }}, <a href="/logout">Log out</a></div>
+    <div>
+      <center class="choose">
+        Would you like to:<br>
+        <button class="chooseClassify">Classify</button> or <button class="chooseSegment">Segment</button> or <button class="next">Skip</button>
+      </center>
+      <br>
+      <center class="segment">
+        <button class="reset">Reset</button><br><br>
+        Hold down <b>shift</b> to draw a vertical segmentation line<br>
+        Hold down <b>control</b> to draw a segmentation line ignoring boundaries<br>
+        <button class="doSegment">Submit Segmentation</button><br>
+      </center>
+      <center class="classify">
+        <button class="reset">Reset</button><br><br>
+        Suggested categories: <div class="keywords"></div>
+        Custom categories: <input class="customKeywords" type="text">
+        <button class="doClassify">Submit Classification</button><br>
+      </center>
+      <br>
+      <center class="msg"></center>
+      <br>
+      <center>
+        <div class="canvasHolder">
+          <div>
+            <canvas class="canvas"></canvas>
+          </div>
+          <div>
+            paper : <a href="{{ paperUrl }}">{{ paperUrl }}</a>
+          </div>
+          <div class="caption">
+            {{ caption }}
+          </div>
+        </div>
+      </center>
+    </div>
+  </body>
+</html>
