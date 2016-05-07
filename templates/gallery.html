@@ -1,0 +1,67 @@
+<html>
+  <head>
+    <script src="static/js/jquery.js"></script>
+    <script src="static/js/underscore.js"></script>
+    <script src="static/js/backbone.js"></script>
+
+    <script src="static/js/gallery.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="static/css/index.css">
+    <link rel="stylesheet" type="text/css" href="static/css/gallery.css">
+
+    <script class="galleryItemTemplate" type="application/text">
+      <div class="box">
+        <div class="innerContent">
+          <img src="<%= url %>"><br>
+          <a href="<%= paperUrl %>">paper</a>
+        </div>
+      </div>
+    </script>
+
+    <script type="application/text" class="infoTemplate">
+      <div>
+        <h3>Info</h3>
+        Paper: <a href="<%= paperUrl %>"><%= paperUrl %></a><br>
+        Caption: <%= caption %><br>
+        Notes:<br>
+        <textarea class="notes" cols="80"><%= notes.string %></textarea><br>
+        Category: <input class="category" value="<%= category %>"><br>
+        <button>Save</button>
+      </div>
+    </script>
+  </head>
+  <body>
+    <div class="data">{{ data }}</div>
+    <div>
+      <h1>Instructions</h1>
+
+      This webapp lets you retrain the last stage of a deep learning neural network (AlexNet) to classify images. There are a number of classes selectable with the dropdown on the right. By default the gallery shows images highly ranked for the selected category based on whatever training data is provided for that category. To see the training data for a category uncheck the "Predict" checkbox at the right side of the page.
+
+      <ol>
+        <li>Images can be removed/added to currently selected category training set by either control + clicking on them (you'll see a dotted border if they are in the training set) or</li>
+        <li>By clicking the image and typing in the name of the category you want it to belong to in the 'Category' box inside the info box that appears and clicking 'Save'</li>
+        <li>When any training information has changed, click the "Recompute rankings" button below these instructions to score all the images again (recomputing rankings can take about a <b>minute</b>, so be patient)</li>
+        <li>New categories can be added by doing the steps in #2 and typing in a yet-unused category name. Category names are case sensitive</li>
+      </ol>
+    <div><a href="/recompute"><h3>Recompute rankings (this'll take about a minute -- be patient)</h3></a></div>
+    <div class="toolbar">Classifications: {{ classifications }}, Segmentations: {{ segmentations }}, Username: {{ username }}, <a href="/logout">Log out</a></div>
+    <div class="toolbar">
+      Predict <input class="predict" type="checkbox" checked>
+      <button class="previous">Previous</button>
+      <span class="count"></span> / <span class="total"></span>
+      <button class="next">Next</button>
+      <select class="category">
+        {% for category in categories %}
+        <option value="{{ category }}">{{ category }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="info">
+    </div>
+    <div class="msg">
+      Ready
+    </div>
+    <div class="gallery">
+    </div>
+  </body>
+</html>
