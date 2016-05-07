@@ -8,11 +8,6 @@ dbpath = '/home/bbales2/scraping/training/db.sql'
 engine = database.getEngine(dbpath)
 session = database.getSession(engine)
 
-dbpath2 = '/home/bbales2/scraping/training/db2.sql'
-
-engine2 = database.getEngine(dbpath2)
-session2 = database.getSession(engine2)
-
 #%%
 figures = session.query(database.Figure).all()
 #%%
@@ -30,7 +25,7 @@ stopwords = stemSentence(' '.join(nltk.corpus.stopwords.words("english"))) + ['a
 
 notword = re.compile(r'[^a-zA-Z -]')
 loWords = []
-for i, figure in enumerate(figures[0:500]):
+for i, figure in enumerate(figures):
     words = [word for word in stemSentence(figure.caption) if len(notword.sub('', word)) > 0 and word not in stopwords]
 
     loWords.append(words)
@@ -42,15 +37,15 @@ dictionary.filter_extremes(no_below = 5, no_above = 0.5)
 dictionary.compactify()
 tfidf = gensim.models.tfidfmodel.TfidfModel(dictionary = dictionary)
 
-dictionary.save('/home/bbales2/scraping/training/dictionary.db')
-tfidf.save('/home/bbales2/scraping/training/tfidf.db')
+#dictionary.save('/home/bbales2/scraping/training/dictionary.db')
+#tfidf.save('/home/bbales2/scraping/training/tfidf.db')
 #%%
 for i, figure in enumerate(figures):
     keywords = tfidf[dictionary.doc2bow(loWords[i])]
 
     keywords = sorted(keywords, key = lambda x : x[1], reverse = True)
 
-    keywords = [(dictionary[i], value) for i, value in keywords]
+    keywords = [(dictionary[j], value) for j, value in keywords]
 
     session.add(database.FigureKeywords(keywords = keywords, figureId = figure.id))
 

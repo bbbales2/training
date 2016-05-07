@@ -30,6 +30,24 @@ class Figure(Base):
     url = sqlalchemy.Column(sqlalchemy.String)
     paperUrl = sqlalchemy.Column(sqlalchemy.String)
 
+class Note(Base):
+    __tablename__ = 'notes'
+
+    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key = True)
+    string = sqlalchemy.Column(sqlalchemy.String)
+    figureId = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('figures.id'))
+
+    figure = sqlalchemy.orm.relationship('Figure', backref = sqlalchemy.orm.backref('notes'))
+
+class FigureFeatures(Base):
+    __tablename__ = 'features'
+
+    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key = True)
+    data = sqlalchemy.Column(sqlalchemy.types.PickleType)
+    figureId = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('figures.id'))
+
+    figure = sqlalchemy.orm.relationship('Figure', backref = sqlalchemy.orm.backref('features'))
+
 class FigureKeywords(Base):
     __tablename__ = 'figure_keywords'
 

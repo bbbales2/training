@@ -96,7 +96,7 @@ Login.Controller = Backbone.View.extend(
         {
             this.$el.find( '.msg' ).html("<span>Submitting results and acquiring new image...</span>");
 
-            var selectors = this.$el.find( '.keywordSelector' );
+            var selectors = this.$el.find( '.keywords input' );
 
             var categories = [];
 
@@ -104,27 +104,28 @@ Login.Controller = Backbone.View.extend(
             {
                 var el = selectors.eq(i);
 
-                if(el.hasClass('selected'))
+                if(el.prop('checked'))
                 {
-                    categories.push(el.text().trim());
+                    categories.push(el.data('keyword'));
                 }
             }
 
-            var customKeywords = this.$el.find( '.customKeywords' ).val().trim().split(' ');
+            //var customKeywords = this.$el.find( '.customKeywords' ).val().trim().split(' ');
 
-            for(var i = 0; i < customKeywords.length; i++)
-            {
-                categories.push(customKeywords[i]);
-            }
+            //for(var i = 0; i < customKeywords.length; i++)
+            //{
+            //    categories.push(customKeywords[i]);
+            //}
 
-            $.ajax( { url : '/doClassification',
-                      data : { data : JSON.stringify({ categories : categories,
-                                                       id : this.data.id }) },
-                      dataType : 'json',
-                      method : 'POST',
-                      success : _.bind(this.next, this),
-                      error : _.bind(this.next, this)
-                    } );
+            $.ajax( {
+                url : '/doClassification',
+                data : { data : JSON.stringify({ categories : categories,
+                                                 id : this.data.id }) },
+                dataType : 'json',
+                method : 'POST',
+                success : _.bind(this.next, this),
+                error : _.bind(this.next, this)
+            } );
         },
 
         enableClassification : function()
@@ -134,17 +135,36 @@ Login.Controller = Backbone.View.extend(
             this.$el.find( '.choose' ).hide();
             this.$el.find( '.classify' ).show();
 
-            var keywords = [["superalloy microstructure", 0.5], ["plot", 0.5], ["phase diagram", 0.5], ["xray", 0.5], ["picture", 0.5], ["schematic", 0.5]];//.concat(this.data.keywords);
+            var keywords = ["superalloy microstructure", "microstructure", "plot", "phase diagram", "xray", "picture", "schematic"];//.concat(this.data.keywords);
+
+            var template = _.template('<tr><td><%= keyword %></td><td><%= confidence %>%</td><td><input name="keyword" type="radio"></td><tr>');
+
+            var topKeyword = keywords[0];
+            var maxRanking = -1.0;
+            for(var i = 0; i < keywords.length; i++)
+            {
+                if(this.data.rankings[keywords[i]] > maxRanking)
+                {
+                    maxRanking = this.data.rankings[keywords[i]];
+                    topKeyword = keywords[i];
+                }
+            }
 
             for(var i = 0; i < keywords.length; i++)
             {
-                var el = $( '<div>' + keywords[i][0] + '</div>' ).appendTo( this.$el.find( '.keywords' ) );
+                var el = $( template( {
+                    keyword : keywords[i],
+                    confidence : (this.data.rankings[keywords[i]] * 100.0).toPrecision(4)
+                } ) ).appendTo( this.$el.find( '.keywords' ) );
 
-                el.addClass('keywordSelector')
+                var radio = el.find('input');
 
-                el.click( _.partial( function(el) {
-                    el.toggleClass('selected');
-                }, el ));
+                radio.data('keyword', keywords[i]);
+
+                if(topKeyword == keywords[i])
+                {
+                    radio.prop('checked', true);
+                }
             }
         },
 

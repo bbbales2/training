@@ -3,6 +3,7 @@
     text-align : right;
     border-width : 1px;
     border-bottom-style : solid;
+    padding : 2px;
 }
 
 .choose button, .reset {
